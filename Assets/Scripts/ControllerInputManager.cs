@@ -7,17 +7,35 @@ public class ControllerInputManager : MonoBehaviour {
     private SteamVR_TrackedObject trackedObj;
     public SteamVR_Controller.Device device;
 
+    [Header( "Teleporting" )]
     //- to teleport
+    public bool isLeftController;
     private LineRenderer laser;
     private float yNudgeAmount = 0.1f;
     public GameObject teleportAimerObject;
     public Vector3 teleportLocation;
     public GameObject player;
     public LayerMask layerMask;
-    public bool isLeftController;
 
+    [Header( "Grabbing and Throwing" )]
     //- grabbing and throwing
     private float throwForce = 1.5f;
+
+    [Header( "Object Menu" )]
+    //- object menu
+    public bool isRightController;
+    private float swipeSum;
+    private float touchLast;
+    private float touchCurrent;
+    private float distance;
+    private bool hasSwipedLeft;
+    private bool hasSwipedRight;
+    public ObjectMenuManager objectMenuManager;
+
+
+
+
+    //------------------------------------------------------------------------------------------------------
 
     void Start () {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
@@ -27,6 +45,7 @@ public class ControllerInputManager : MonoBehaviour {
 	void Update () {
         device = SteamVR_Controller.Input((int)trackedObj.index);
         Teleport();
+        ObjectMenu();
 	}
 
     /* -------------------------------------------------------------------------------------------------------- //
@@ -109,5 +128,81 @@ public class ControllerInputManager : MonoBehaviour {
                 GrabObject(other);
             }
         }
+    }
+
+    /* -------------------------------------------------------------------------------------------------------------------------------------------------------- //
+
+                                                                                   Object Menu
+   // -------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+    void ObjectMenu ()
+    {
+        if (isRightController)
+        {
+            if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
+            {
+                touchLast = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad).x;
+            }
+            if (device.GetTouch(SteamVR_Controller.ButtonMask.Touchpad)) {
+                touchCurrent = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad).x;
+                distance = touchCurrent - touchLast;
+                touchLast = touchCurrent;
+                swipeSum += distance;
+
+                if (!hasSwipedRight)
+                {
+                    if (swipeSum > 0.5f)
+                    {
+                        swipeSum = 0;
+                        SwipeRight();
+                        hasSwipedRight = true;
+                        hasSwipedLeft = false;
+                    }
+                }
+
+                if (!hasSwipedLeft)
+                {
+                    if (swipeSum < -0.5f)
+                    {
+                        swipeSum = 0;
+                        SwipeLeft();
+                        hasSwipedLeft = true;
+                        hasSwipedRight = false;
+                    }
+                }
+            }
+
+            if (device.GetTouchUp(SteamVR_Controller.ButtonMask.Touchpad))
+            {
+                int currentObject = objectMenuManager.currentObject;
+                objectMenuManager.objectListPrefabs[currentObject].SetActive(false);
+
+                swipeSum = 0;
+                touchCurrent = 0;
+                touchLast = 0;
+                hasSwipedLeft = false;
+                hasSwipedRight = false;
+            }
+
+            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
+            {
+                SpawnObject();
+            }
+        }
+    }
+
+    void SwipeRight()
+    {
+        objectMenuManager.MenuRight();
+    }
+
+    void SwipeLeft ()
+    {
+        objectMenuManager.MenuLeft();
+    }
+
+    void SpawnObject ()
+    {
+        objectMenuManager.SpwanCurrentObject();
     }
 }
