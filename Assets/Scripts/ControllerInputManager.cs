@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ControllerInputManager : MonoBehaviour {
 
@@ -31,7 +32,6 @@ public class ControllerInputManager : MonoBehaviour {
     private bool hasSwipedLeft;
     private bool hasSwipedRight;
     public ObjectMenuManager objectMenuManager;
-
 
 
 
@@ -128,6 +128,20 @@ public class ControllerInputManager : MonoBehaviour {
                 GrabObject(other);
             }
         }
+        
+            if (other.gameObject.CompareTag("Structure"))
+            {
+                if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
+                {
+                    other.transform.SetParent(null);
+                    Rigidbody rigidbody = other.GetComponent<Rigidbody>();
+                    rigidbody.isKinematic = false;
+                }
+                else if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
+                {
+                    GrabObject(other);
+                }
+            }
     }
 
     /* -------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -175,7 +189,7 @@ public class ControllerInputManager : MonoBehaviour {
             if (device.GetTouchUp(SteamVR_Controller.ButtonMask.Touchpad))
             {
                 int currentObject = objectMenuManager.currentObject;
-                objectMenuManager.objectListPrefabs[currentObject].SetActive(false);
+                objectMenuManager.objectList[currentObject].SetActive(false);
 
                 swipeSum = 0;
                 touchCurrent = 0;
@@ -183,8 +197,8 @@ public class ControllerInputManager : MonoBehaviour {
                 hasSwipedLeft = false;
                 hasSwipedRight = false;
             }
-
-            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
+            
+            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger) && device.GetTouch(SteamVR_Controller.ButtonMask.Touchpad))
             {
                 SpawnObject();
             }
