@@ -7,6 +7,9 @@ public class ControllerInputManager : MonoBehaviour {
     private SteamVR_TrackedObject trackedObj;
     public SteamVR_Controller.Device device;
 
+    public BallReset ballReset;
+    public Material outsidePlayspaceMaterial;
+
     [Header( "Teleporting" )]
     //- to teleport
     public bool isLeftController;
@@ -31,7 +34,6 @@ public class ControllerInputManager : MonoBehaviour {
     private bool hasSwipedLeft;
     private bool hasSwipedRight;
     public ObjectMenuManager objectMenuManager;
-
 
 
     //------------------------------------------------------------------------------------------------------
@@ -64,7 +66,7 @@ public class ControllerInputManager : MonoBehaviour {
                 laser.SetPosition(0, gameObject.transform.position);
                 RaycastHit hit;
 
-                if (Physics.Raycast(transform.position, transform.forward, out hit, 5, layerMask))
+                if (Physics.Raycast(transform.position, transform.forward, out hit, 15, layerMask))
                 {
                     teleportLocation = hit.point;
                     laser.SetPosition(1, teleportLocation);
@@ -72,14 +74,16 @@ public class ControllerInputManager : MonoBehaviour {
                 }
                 else
                 {
-                    teleportLocation = new Vector3(transform.forward.x * 5 + transform.position.x, transform.forward.y * 5 + transform.position.y, transform.forward.z * 5 + transform.position.z);
+                    teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, transform.forward.y * 15 + 
+                                                    transform.position.y, transform.forward.z * 15 + transform.position.z);
                     RaycastHit groundRay;
 
-                    if (Physics.Raycast(teleportLocation, -Vector3.up, out groundRay, 7, layerMask))
+                    if (Physics.Raycast(teleportLocation, -Vector3.up, out groundRay, 17, layerMask))
                     {
-                        teleportLocation = new Vector3(transform.forward.x * 5 + transform.position.x, groundRay.point.y, transform.forward.z * 5 + transform.position.z);
+                        teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, 
+                                                        groundRay.point.y, transform.forward.z * 15 + transform.position.z);
                     }
-                    laser.SetPosition(1, transform.forward * 5 + transform.position);
+                    laser.SetPosition(1, transform.forward * 15 + transform.position);
                     teleportAimerObject.transform.position = teleportLocation + new Vector3(0, yNudgeAmount, 0);
                 }
             }
@@ -112,6 +116,8 @@ public class ControllerInputManager : MonoBehaviour {
         rigidbody.isKinematic = false;
         rigidbody.velocity = device.velocity * throwForce;
         rigidbody.angularVelocity = device.angularVelocity;
+
+        ballReset.AntiCheat();
     }
 
     private void OnTriggerStay(Collider other)
