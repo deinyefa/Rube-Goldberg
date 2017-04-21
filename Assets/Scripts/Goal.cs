@@ -6,9 +6,7 @@ using UnityEngine;
 public class Goal : MonoBehaviour {
 
     public GameObject[] collectables;
-    private int currentLevel;
-    private int nextLevel;
-    private string nextLevelName;
+	public GameObject goal;
     
 
     void Update () {
@@ -17,7 +15,7 @@ public class Goal : MonoBehaviour {
 
     void LoadNewLevel()
     {
-        if (AreStarsInActive())
+        if (AreStarsAndGoalInActive())
         {
             switch (SceneManager.GetActiveScene().name)
             {
@@ -39,11 +37,11 @@ public class Goal : MonoBehaviour {
         }
     }
 
-    bool AreStarsInActive()
+    bool AreStarsAndGoalInActive()
     {
         foreach (GameObject collectable in collectables)
         {
-            if (collectable.gameObject.activeInHierarchy)
+			if (collectable.gameObject.activeInHierarchy && goal.gameObject.activeInHierarchy)
             {
                 return false;
             }
