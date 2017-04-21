@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ObjectMenuManager : MonoBehaviour {
 
@@ -41,8 +42,11 @@ public class ObjectMenuManager : MonoBehaviour {
         objectList[currentObject].SetActive(true);
     }
 
+  
+     
     public void SpwanCurrentObject ()
     {
-        Instantiate(objectListPrefabs[currentObject], objectList[currentObject].transform.position, objectList[currentObject].transform.rotation);
+        Instantiate(objectListPrefabs[currentObject], objectList[currentObject].transform.position,
+                    objectList[currentObject].transform.rotation);
     }
 }

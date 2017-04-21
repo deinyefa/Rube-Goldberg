@@ -34,6 +34,7 @@ public class ControllerInputManager : MonoBehaviour {
     private bool hasSwipedLeft;
     private bool hasSwipedRight;
     public ObjectMenuManager objectMenuManager;
+    public ObjectController objectController;
 
 
     //------------------------------------------------------------------------------------------------------
@@ -222,6 +223,6 @@ public class ControllerInputManager : MonoBehaviour {
 
     void SpawnObject ()
     {
-        objectMenuManager.SpwanCurrentObject();
+        objectController.SpawnObject();
     }
 }
