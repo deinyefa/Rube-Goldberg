@@ -26,7 +26,7 @@ public class Goal : MonoBehaviour {
                     SteamVR_LoadLevel.Begin("level3");
                     break;
                 case "Level3":
-                    SteamVR_LoadLevel.Begin("level3");
+                    SteamVR_LoadLevel.Begin("level4");
                     break;
                 case "Level4":
                     SteamVR_LoadLevel.Begin("WinScreen");

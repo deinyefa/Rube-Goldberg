@@ -9,17 +9,14 @@ public class BallReset : MonoBehaviour {
     public Material outsidePlayspaceMaterial;
     Material insidePlayspaceMaterial;
     int layerMask;
-    public Goal goal;
+    Goal goal;
 
     // Use this for initialization
     void Start () {
         initialPosition = transform.position;
         rigidBody = GetComponent<Rigidbody>();
         insidePlayspaceMaterial = GetComponent<Renderer>().material;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+		goal = GameObject.FindObjectOfType<Goal> ();
 	}
 
     private void OnCollisionEnter(Collision other)
@@ -50,9 +47,9 @@ public class BallReset : MonoBehaviour {
     }
     
 
-    /* ----------------------------------------------------------------------------------- //
+    /* ----------------------------------------------------------------------------------- 
                                           Anti-cheat Code
-    // ----------------------------------------------------------------------------------- */
+       ----------------------------------------------------------------------------------- */
 
         public void AntiCheat()
         {

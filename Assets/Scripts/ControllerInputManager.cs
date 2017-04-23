@@ -34,19 +34,38 @@ public class ControllerInputManager : MonoBehaviour {
     private bool hasSwipedLeft;
     private bool hasSwipedRight;
     public ObjectMenuManager objectMenuManager;
-    public ObjectController objectController;
+
+	private ObjectController bridge;
+	private ObjectController cog;
+	private ObjectController plank;
+	private ObjectController portal;
+	private ObjectController torus;
 
 
     //------------------------------------------------------------------------------------------------------
 
     void Start () {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
-        laser = GetComponentInChildren<LineRenderer>();
+        
+		laser = GetComponentInChildren<LineRenderer>();
+
+		bridge = new ObjectController ();
+		cog = new ObjectController ();
+		plank = new ObjectController ();
+		portal = new ObjectController ();
+		torus = new ObjectController ();
+
+		bridge.InitializeMaxCount (-1, 3, 3, 1);
+		cog.InitializeMaxCount (-1, 3, 1, 1);
+		plank.InitializeMaxCount (-1, 3, 1, 1);
+		portal.InitializeMaxCount (-1, 3, 1, 1);
+		torus.InitializeMaxCount (-1, 3, 1, 1);
 	}
 	
 	void Update () {
         device = SteamVR_Controller.Input((int)trackedObj.index);
-        Teleport();
+        
+		Teleport();
         ObjectMenu();
 	}
 
@@ -223,6 +242,27 @@ public class ControllerInputManager : MonoBehaviour {
 
     void SpawnObject ()
     {
-        objectController.SpawnObject();
+		switch (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject].name) {
+		case "bridge":
+			bridge.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
+				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
+			break;
+		case "cog":
+			cog.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
+				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
+			break;
+		case "plank":
+			plank.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
+				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
+			break;
+		case "portal":
+			portal.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
+				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
+			break;
+		case "torus":
+			torus.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
+				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
+			break;
+		}
     }
 }

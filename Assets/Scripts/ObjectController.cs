@@ -12,25 +12,24 @@ using UnityEngine.SceneManagement;
 
 public class ObjectController : MonoBehaviour {
 
-    public int maxCountForLevel1;
-    public int maxCountForLevel2;
-    public int maxCountForLevel3;
-    public int maxCountForLevel4;
+	[Header( "Level" )]
+	private int maxCountForLevel1;
+	private int maxCountForLevel2;
+	private int maxCountForLevel3;
+	private int maxCountForLevel4;
 
-    private ObjectMenuManager objectMenuManager;
+	public void InitializeMaxCount (int level1, int level2, int level3, int level4) {
+		maxCountForLevel1 = level1;
+		maxCountForLevel2 = level2;
+		maxCountForLevel3 = level3;
+		maxCountForLevel4 = level4;
+	}
 
-    private void Start()
-    {
-        objectMenuManager = GameObject.FindObjectOfType<ObjectMenuManager>();
-    }
-
-    public void SpawnObject ()
+	public void SpawnObject (GameObject go, Transform tf)
     {
         if (GetMaxCount() != 0)
         {
-            Instantiate(objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
-                objectMenuManager.objectList[objectMenuManager.currentObject].transform.position,
-              objectMenuManager.objectList[objectMenuManager.currentObject].transform.rotation);
+			Instantiate(go, tf.position, tf.rotation);
             GetMaxCount(1);
         }
     }
