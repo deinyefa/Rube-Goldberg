@@ -36,10 +36,10 @@ public class ControllerInputManager : MonoBehaviour {
     public ObjectMenuManager objectMenuManager;
 
 	private ObjectController bridge;
-	private ObjectController cog;
-	private ObjectController plank;
+	private ObjectController trampoline;
+	private ObjectController wood_plank;
 	private ObjectController portal;
-	private ObjectController torus;
+	private ObjectController metal_plank;
 
 
     //------------------------------------------------------------------------------------------------------
@@ -48,18 +48,19 @@ public class ControllerInputManager : MonoBehaviour {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
         
 		laser = GetComponentInChildren<LineRenderer>();
+		ballReset = GameObject.FindObjectOfType<BallReset> ();
 
 		bridge = new ObjectController ();
-		cog = new ObjectController ();
-		plank = new ObjectController ();
+		trampoline = new ObjectController ();
+		wood_plank = new ObjectController ();
 		portal = new ObjectController ();
-		torus = new ObjectController ();
+		metal_plank = new ObjectController ();
 
 		bridge.InitializeMaxCount (-1, 3, 3, 1);
-		cog.InitializeMaxCount (-1, 3, 1, 1);
-		plank.InitializeMaxCount (-1, 3, 1, 1);
+		trampoline.InitializeMaxCount (-1, 3, 1, 1);
+		wood_plank.InitializeMaxCount (-1, 3, 1, 1);
 		portal.InitializeMaxCount (-1, 3, 1, 1);
-		torus.InitializeMaxCount (-1, 3, 1, 1);
+		metal_plank.InitializeMaxCount (-1, 3, 1, 1);
 	}
 	
 	void Update () {
@@ -243,24 +244,24 @@ public class ControllerInputManager : MonoBehaviour {
     void SpawnObject ()
     {
 		switch (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject].name) {
-		case "bridge":
+		case "Bridge":
 			bridge.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
 				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
 			break;
-		case "cog":
-			cog.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
+		case "Trampoline":
+			trampoline.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
 				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
 			break;
-		case "plank":
-			plank.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
+		case "Wood_Plank":
+			wood_plank.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
 				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
 			break;
-		case "portal":
+		case "Portal":
 			portal.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
 				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
 			break;
-		case "torus":
-			torus.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
+		case "Metal_Plank":
+			metal_plank.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
 				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
 			break;
 		}

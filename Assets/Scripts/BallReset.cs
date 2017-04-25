@@ -20,23 +20,23 @@ public class BallReset : MonoBehaviour {
 	}
 
     private void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.CompareTag("Ground"))
-        {
-            transform.position = initialPosition;
-            rigidBody.velocity = Vector3.zero;
-            GetComponent<Renderer>().material = insidePlayspaceMaterial;
-            foreach (GameObject collectable in goal.collectables)
-            {
-                collectable.GetComponent<MeshCollider>().enabled = true;
-            }
+	{
+		if (other.gameObject.CompareTag ("Ground")) {
+			transform.position = initialPosition;
+			rigidBody.velocity = Vector3.zero;
+			GetComponent<Renderer> ().material = insidePlayspaceMaterial;
+			foreach (GameObject collectable in goal.collectables) {
+				collectable.GetComponent<MeshCollider> ().enabled = true;
+			}
 
-            for (int i = 0; i < goal.collectables.Length; i++)
-            {
-                goal.collectables[i].SetActive(true);
-            }
-        }
+			for (int i = 0; i < goal.collectables.Length; i++) {
+				goal.collectables [i].SetActive (true);
+			}
+		}
+	}
 
+	void OnTriggerEnter (Collider other)
+	{
         foreach (GameObject collectable in goal.collectables)
         {
             if (other.gameObject.CompareTag("Collectable"))

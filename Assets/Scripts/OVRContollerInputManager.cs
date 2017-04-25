@@ -34,7 +34,11 @@ public class OVRContollerInputManager : MonoBehaviour {
     private bool menuIsSwipeable;
     private float menuStickX;
 
-
+	private ObjectController bridge;
+	private ObjectController trampoline;
+	private ObjectController wood_plank;
+	private ObjectController portal;
+	private ObjectController metal_plank;
 
     //------------------------------------------------------------------------------------------------------
 
@@ -49,11 +53,22 @@ public class OVRContollerInputManager : MonoBehaviour {
         {
             thisController = OVRInput.Controller.RTouch;
         }
+
+		bridge = new ObjectController ();
+		trampoline = new ObjectController ();
+		wood_plank = new ObjectController ();
+		portal = new ObjectController ();
+		metal_plank = new ObjectController ();
+
+		bridge.InitializeMaxCount (-1, 3, 3, 1);
+		trampoline.InitializeMaxCount (-1, 3, 1, 1);
+		wood_plank.InitializeMaxCount (-1, 3, 1, 1);
+		portal.InitializeMaxCount (-1, 3, 1, 1);
+		metal_plank.InitializeMaxCount (-1, 3, 1, 1);
     }
 
     void Update()
     {
-        device = SteamVR_Controller.Input((int)trackedObj.index);
         Teleport();
         ObjectMenu();
     }
@@ -184,7 +199,7 @@ public class OVRContollerInputManager : MonoBehaviour {
         }
         if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, thisController))
         {
-            objectMenuManager.SpwanCurrentObject();
+			SpawnObject ();
         }
     }
 
@@ -200,6 +215,27 @@ public class OVRContollerInputManager : MonoBehaviour {
 
     void SpawnObject()
     {
-        objectMenuManager.SpwanCurrentObject();
+		switch (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject].name) {
+		case "Bridge":
+			bridge.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
+				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
+			break;
+		case "Trampoline":
+			trampoline.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
+				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
+			break;
+		case "Wood_Plank":
+			wood_plank.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
+				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
+			break;
+		case "Portal":
+			portal.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
+				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
+			break;
+		case "Metal_Plank":
+			metal_plank.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
+				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
+			break;
+		}
     }
 }
