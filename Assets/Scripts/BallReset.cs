@@ -11,12 +11,16 @@ public class BallReset : MonoBehaviour {
     int layerMask;
     Goal goal;
 
-    // Use this for initialization
-    void Start () {
-        initialPosition = transform.position;
+	void Awake () 
+	{
         rigidBody = GetComponent<Rigidbody>();
         insidePlayspaceMaterial = GetComponent<Renderer>().material;
 		goal = GameObject.FindObjectOfType<Goal> ();
+	}
+
+	void Start () 
+	{
+		initialPosition = transform.position;
 	}
 
     private void OnCollisionEnter(Collision other)

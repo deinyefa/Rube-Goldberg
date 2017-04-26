@@ -15,7 +15,6 @@ public class Portal : MonoBehaviour {
 	void Awake () 
 	{
 		path = GetComponentInChildren<LineRenderer> ();
-		newPosition = transform.forward * 7;
 	}
 
 	void Update () 
@@ -26,7 +25,9 @@ public class Portal : MonoBehaviour {
 	void ShowNewPosition ()
 	{
 		path.SetPosition (0, gameObject.transform.position);
-		path.SetPosition (1, newPosition);
+		path.SetPosition (1, new Vector3 (transform.position.x, transform.position.y, transform.position.z - 1f));
+		path.transform.Rotate (transform.rotation.x, transform.rotation.y, transform.rotation.z);
+		newPosition = path.GetPosition (1);
 	}
 
 	void OnTriggerEnter(Collider other)
@@ -35,6 +36,7 @@ public class Portal : MonoBehaviour {
 		{
 			Destroy(this.gameObject);
 			other.gameObject.transform.position = newPosition;
+			other.transform.parent = null;
 		}
 	}
 }

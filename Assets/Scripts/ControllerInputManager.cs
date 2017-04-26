@@ -44,12 +44,16 @@ public class ControllerInputManager : MonoBehaviour {
 
     //------------------------------------------------------------------------------------------------------
 
-    void Start () {
-        trackedObj = GetComponent<SteamVR_TrackedObject>();
-        
+	void Awake () 
+	{
+		trackedObj = GetComponent<SteamVR_TrackedObject>();
+
 		laser = GetComponentInChildren<LineRenderer>();
 		ballReset = GameObject.FindObjectOfType<BallReset> ();
+	}
 
+    void Start () 
+	{
 		bridge = new ObjectController ();
 		trampoline = new ObjectController ();
 		wood_plank = new ObjectController ();
