@@ -6,8 +6,9 @@ public class ControllerInputManager : MonoBehaviour {
 
     private SteamVR_TrackedObject trackedObj;
     public SteamVR_Controller.Device device;
-
-    public BallReset ballReset;
+    
+    private GameObject ball;
+    private BallReset ballReset;
     public Material outsidePlayspaceMaterial;
 
     [Header( "Teleporting" )]
@@ -49,12 +50,14 @@ public class ControllerInputManager : MonoBehaviour {
 		trackedObj = GetComponent<SteamVR_TrackedObject>();
 
 		laser = GetComponentInChildren<LineRenderer>();
-		ballReset = GameObject.FindObjectOfType<BallReset> ();
+        ballReset = GameObject.FindObjectOfType<BallReset>();
 	}
 
     void Start () 
 	{
-		bridge = new ObjectController ();
+        ball = GameObject.Find("Ball");
+
+        bridge = new ObjectController ();
 		trampoline = new ObjectController ();
 		wood_plank = new ObjectController ();
 		portal = new ObjectController ();
@@ -74,15 +77,20 @@ public class ControllerInputManager : MonoBehaviour {
 		{
 			Teleport ();
 		}
-
+        else if (IsHoldingBall() && device.GetPress(SteamVR_Controller.ButtonMask.Touchpad) && isLeftController)
+        {
+            ball.GetComponent<Renderer>().material = outsidePlayspaceMaterial;
+        }
+        if (device.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad))
+        {
+            ball.GetComponent<Renderer>().material = ballReset.insidePlayspaceMaterial;
+        }
         ObjectMenu();
 	}
 
 	//- returns false if the controller is not parented to the ball
 	bool IsHoldingBall ()
 	{
-		GameObject ball = GameObject.Find ("Ball");
-
 		if (ball.transform.parent == gameObject.transform) {
 			return true;
 		} 
@@ -163,7 +171,7 @@ public class ControllerInputManager : MonoBehaviour {
         rigidbody.velocity = device.velocity * throwForce;
         rigidbody.angularVelocity = device.angularVelocity;
 
-        ballReset.AntiCheat();
+       // ballReset.AntiCheat();
     }
 
     private void OnTriggerStay(Collider other)

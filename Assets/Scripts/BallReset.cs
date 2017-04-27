@@ -7,7 +7,8 @@ public class BallReset : MonoBehaviour {
     Vector3 initialPosition;
     Rigidbody rigidBody;
     public Material outsidePlayspaceMaterial;
-    Material insidePlayspaceMaterial;
+    [HideInInspector]
+    public Material insidePlayspaceMaterial;
     int layerMask;
     Goal goal;
 
@@ -53,11 +54,11 @@ public class BallReset : MonoBehaviour {
             }
         }
     }
-    
+
 
     /* ----------------------------------------------------------------------------------- 
                                           Anti-cheat Code
-       ----------------------------------------------------------------------------------- */
+       ----------------------------------------------------------------------------------- 
 
         public void AntiCheat()
         {
@@ -88,5 +89,5 @@ public class BallReset : MonoBehaviour {
                 Debug.Log("Did not Hit");
                 GetComponent<Renderer>().material = insidePlayspaceMaterial;
             }
-        }
+        } */
 }
