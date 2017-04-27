@@ -70,8 +70,23 @@ public class ControllerInputManager : MonoBehaviour {
 	void Update () {
         device = SteamVR_Controller.Input((int)trackedObj.index);
         
-		Teleport();
+		if (!IsHoldingBall()) 
+		{
+			Teleport ();
+		}
+
         ObjectMenu();
+	}
+
+	//- returns false if the controller is not parented to the ball
+	bool IsHoldingBall ()
+	{
+		GameObject ball = GameObject.Find ("Ball");
+
+		if (ball.transform.parent == gameObject.transform) {
+			return true;
+		} 
+		return false;
 	}
 
     /* -------------------------------------------------------------------------------------------------------- //
@@ -93,20 +108,26 @@ public class ControllerInputManager : MonoBehaviour {
 
                 if (Physics.Raycast(transform.position, transform.forward, out hit, 15, layerMask))
                 {
-                    teleportLocation = hit.point;
-                    laser.SetPosition(1, teleportLocation);
-                    teleportAimerObject.transform.position = new Vector3(teleportLocation.x, teleportLocation.y + yNudgeAmount, teleportLocation.z);
+                    if (hit.collider.name == "FloorPlane" || hit.collider.name == "Platform")
+                    {
+                        teleportLocation = hit.point;
+                        laser.SetPosition(1, teleportLocation);
+                        teleportAimerObject.transform.position = new Vector3(teleportLocation.x,
+                                                                            teleportLocation.y + yNudgeAmount, teleportLocation.z);
+                    }
                 }
                 else
                 {
-                    teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, transform.forward.y * 15 + 
-                                                    transform.position.y, transform.forward.z * 15 + transform.position.z);
+                        //teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, transform.forward.y * 15 +
+                                                        //transform.position.y, transform.forward.z * 15 + transform.position.z);
                     RaycastHit groundRay;
-
                     if (Physics.Raycast(teleportLocation, -Vector3.up, out groundRay, 17, layerMask))
                     {
-                        teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, 
-                                                        groundRay.point.y, transform.forward.z * 15 + transform.position.z);
+                        if (groundRay.collider.name == "FloorPlane" || groundRay.collider.name == "Platform")
+                        {
+                            teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x,
+                                                            groundRay.point.y, transform.forward.z * 15 + transform.position.z);
+                        }
                     }
                     laser.SetPosition(1, transform.forward * 15 + transform.position);
                     teleportAimerObject.transform.position = teleportLocation + new Vector3(0, yNudgeAmount, 0);
@@ -131,7 +152,7 @@ public class ControllerInputManager : MonoBehaviour {
     {
         col.transform.SetParent(gameObject.transform);
         col.GetComponent<Rigidbody>().isKinematic = true;
-        device.TriggerHapticPulse(1000);
+        device.TriggerHapticPulse(4000);
     }
 
     void ThrowObject (Collider col)
@@ -157,7 +178,7 @@ public class ControllerInputManager : MonoBehaviour {
             {
                 GrabObject(other);
             }
-        }
+		}
         
             if (other.gameObject.CompareTag("Structure"))
             {

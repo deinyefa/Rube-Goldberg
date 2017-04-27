@@ -34,9 +34,9 @@ public class Portal : MonoBehaviour {
 	{
 		if (other.CompareTag ("Throwable"))
 		{
-			Destroy(this.gameObject);
 			other.gameObject.transform.position = newPosition;
 			other.transform.parent = null;
+			other.GetComponent<Rigidbody> ().AddForce (transform.forward * 2);
 		}
 	}
 }
