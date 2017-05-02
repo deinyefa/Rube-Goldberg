@@ -9,28 +9,20 @@ public class HintsManager : MonoBehaviour {
 
     private SteamVR_TrackedObject trackedObj;
     private SteamVR_Controller.Device device;
+    private HintVariables hintVariable;
+    private Text tutorialText;
 
-    private bool hasTeleported = false;
-    private bool ballHasBeenLifted = false;
-    private bool hasCompletedLeftControllerTutorial = false;
-    private bool hasCompletedRightControllerTutorial = false;
-
+    public GameObject controllerTextHint;
     public bool isLeftController;
     public bool isRightController;
-    public Text tutorialText;
 
     void Awake ()
     {
         trackedObj = GetComponentInParent<SteamVR_TrackedObject>();
         tutorialText = GetComponentInChildren<Text>();
+        hintVariable = GameObject.FindObjectOfType<HintVariables>();
 	}
-
-    void Start ()
-    {
-
-    }
 	
-	// Update is called once per frame
 	void Update ()
     {
         device = SteamVR_Controller.Input((int)trackedObj.index);
@@ -51,45 +43,39 @@ public class HintsManager : MonoBehaviour {
                 if (device.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad))
                 {
                     tutorialText.text = "Touch the ball with either\ncontroller and hold the trigger\nto lift it";
-                    hasTeleported = true;
+                    hintVariable.HasTeleported = true;
                 }
                 if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
                 {
-                    ballHasBeenLifted = true;
+                    hintVariable.BallHasBeenLifted = true;
                 }
-                if (ballHasBeenLifted && hasTeleported)
+                if (hintVariable.BallHasBeenLifted == true && hintVariable.HasTeleported == true)
                 {
-                    tutorialText.text = "Press the trigger on the right\ncontroller to continue";
-                    hasCompletedLeftControllerTutorial = true;
-                    Debug.Log(hasCompletedLeftControllerTutorial);
+                    tutorialText.text = "Press and hold\nthe trigger on the right\ncontroller to continue";
+                    hintVariable.LeftControllerTutorialCompleted = true;
                 }
             }
             if (isRightController)
             {
-                
-                if (ballHasBeenLifted && hasTeleported)
-                {
-                    tutorialText.text = "With the right controller,\nswipe left or right\nto choose a tool";
-                }
-                if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
-                {
-                    tutorialText.text = "To choose a tool,\ntouch the touchpad and\npress the trigger.\nMove the tool like\nyou would the ball";
-
-                }
                 //- can only complete right controller tutorial if player has completed left controller tutorial
-                if (hasCompletedLeftControllerTutorial)
+                if (hintVariable.LeftControllerTutorialCompleted == true)
                 {
-                    hasCompletedRightControllerTutorial = true;
-                    if (hasCompletedLeftControllerTutorial && hasCompletedRightControllerTutorial)
+                    if (device.GetPress(SteamVR_Controller.ButtonMask.Trigger))
                     {
-                        Debug.Log(hasCompletedLeftControllerTutorial);
-
-                        if (isLeftController)
-                            tutorialText.gameObject.SetActive(false);
-                        if (isRightController)
-                            tutorialText.gameObject.SetActive(false);
+                        tutorialText.text = "To choose a tool,\ntouch the touchpad while\npressing the trigger.\nMove the tool like\nyou would the ball";
+                    }
+                    if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
+                    {
+                        hintVariable.RightControllerTutorialConpleted = true;
                     }
                 }
+            }
+            if (hintVariable.LeftControllerTutorialCompleted == true && hintVariable.RightControllerTutorialConpleted == true)
+            {
+                if (isLeftController)
+                    controllerTextHint.SetActive(false);
+                if (isRightController)
+                    controllerTextHint.SetActive(false);
             }
         }
     }

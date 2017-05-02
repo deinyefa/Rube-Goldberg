@@ -9,7 +9,7 @@ public class HintVariables : MonoBehaviour {
     private bool hasCompletedLeftControllerTutorial;
     private bool hasCompletedRightControllerTutorial;
 
-    public bool HasTeleport
+    public bool HasTeleported
     {
         get
         {
