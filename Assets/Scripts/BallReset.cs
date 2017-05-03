@@ -54,40 +54,4 @@ public class BallReset : MonoBehaviour {
             }
         }
     }
-
-
-    /* ----------------------------------------------------------------------------------- 
-                                          Anti-cheat Code
-       ----------------------------------------------------------------------------------- 
-
-        public void AntiCheat()
-        {
-            layerMask = 1 << 8;
-            // ToDo: change layer whenever ball leaves the platform
-            layerMask = ~layerMask;
-        
-        RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, layerMask))
-            {
-            //- outside playspace
-            foreach (GameObject collectable in goal.collectables)
-            {
-                collectable.GetComponent<MeshCollider>().enabled = false;
-            }
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-                Debug.Log("Did Hit");
-                GetComponent<Renderer>().material = outsidePlayspaceMaterial;
-            }
-            else
-            {
-            //- inside playspace
-            foreach (GameObject collectable in goal.collectables)
-            {
-                collectable.GetComponent<MeshCollider>().enabled = true;
-            }
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.red);
-                Debug.Log("Did not Hit");
-                GetComponent<Renderer>().material = insidePlayspaceMaterial;
-            }
-        } */
 }
