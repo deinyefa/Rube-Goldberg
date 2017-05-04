@@ -9,9 +9,9 @@ public class HintsManager : MonoBehaviour {
 
     private SteamVR_TrackedObject trackedObj;
     private SteamVR_Controller.Device device;
-    private HintVariables hintVariable;
-    private Text tutorialText;
 
+    public HintVariables hintVariable;
+    public Text tutorialText;
     public GameObject controllerTextHint;
     public bool isLeftController;
     public bool isRightController;
@@ -19,8 +19,6 @@ public class HintsManager : MonoBehaviour {
     void Awake ()
     {
         trackedObj = GetComponentInParent<SteamVR_TrackedObject>();
-        tutorialText = GetComponentInChildren<Text>();
-        hintVariable = GameObject.FindObjectOfType<HintVariables>();
 	}
 	
 	void Update ()
