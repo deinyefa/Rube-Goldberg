@@ -6,6 +6,7 @@ public class ControllerInputManager : MonoBehaviour {
 
     private SteamVR_TrackedObject trackedObj;
     public SteamVR_Controller.Device device;
+    public GameObject rightController;
     
     private GameObject ball;
     private BallReset ballReset;
@@ -91,7 +92,7 @@ public class ControllerInputManager : MonoBehaviour {
 	//- returns false if the controller is not parented to the ball
 	bool IsHoldingBall ()
 	{
-		if (ball.transform.parent == gameObject.transform) {
+		if (ball.transform.parent == gameObject.transform || ball.transform.parent == rightController.gameObject.transform) {
 			return true;
 		} 
 		return false;
