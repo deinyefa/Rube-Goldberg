@@ -41,12 +41,18 @@ public class ObjectMenuManager : MonoBehaviour {
         }
         objectList[currentObject].SetActive(true);
     }
-
   
      
     public void SpwanCurrentObject ()
     {
+        Vector3 newRotation = new Vector3(-90, 0, 0);
+        Quaternion objectListRotation = objectList[currentObject].transform.rotation;
+        if (objectList[currentObject].transform.eulerAngles != Vector3.zero)
+        {
+            Debug.Log(objectListRotation);
+            objectListRotation = Quaternion.Euler(newRotation);
+        } 
         Instantiate(objectListPrefabs[currentObject], objectList[currentObject].transform.position,
-                    objectList[currentObject].transform.rotation);
+                    objectListRotation);
     }
 }

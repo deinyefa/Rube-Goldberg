@@ -39,16 +39,16 @@ public class ObjectController : MonoBehaviour {
         switch (SceneManager.GetActiveScene().name)
         {
             case "Level1":
-                maxCountForLevel1 = maxCountForLevel1 - amountToDecrease;
+                maxCountForLevel1 -= amountToDecrease;
                 return maxCountForLevel1;
             case "Level2":
-                maxCountForLevel2 = maxCountForLevel2 - amountToDecrease;
+                maxCountForLevel2 -= amountToDecrease;
                 return maxCountForLevel2;
             case "Level3":
-                maxCountForLevel3 = maxCountForLevel3 - amountToDecrease;
+                maxCountForLevel3 -= amountToDecrease;
                 return maxCountForLevel3;
             case "Level4":
-                maxCountForLevel4 = maxCountForLevel4 - amountToDecrease;
+                maxCountForLevel4 -= amountToDecrease;
                 return maxCountForLevel4;
             default:
                 return -1;

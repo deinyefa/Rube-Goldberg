@@ -16,7 +16,7 @@ public class ControllerInputManager : MonoBehaviour {
     //- to teleport
     public bool isLeftController;
     private LineRenderer laser;
-    private float yNudgeAmount = 0.1f;
+    private float yNudgeAmount = 0.0001f;
     public GameObject teleportAimerObject;
     public Vector3 teleportLocation;
     public GameObject player;
@@ -37,7 +37,7 @@ public class ControllerInputManager : MonoBehaviour {
     private bool hasSwipedRight;
     public ObjectMenuManager objectMenuManager;
 
-	private ObjectController bridge;
+	//private ObjectController bridge;
 	private ObjectController trampoline;
 	private ObjectController wood_plank;
 	private ObjectController portal;
@@ -58,13 +58,13 @@ public class ControllerInputManager : MonoBehaviour {
 	{
         ball = GameObject.Find("Ball");
 
-        bridge = new ObjectController ();
+        //bridge = new ObjectController ();
 		trampoline = new ObjectController ();
 		wood_plank = new ObjectController ();
 		portal = new ObjectController ();
 		metal_plank = new ObjectController ();
 
-		bridge.InitializeMaxCount (-1, 3, 3, 1);
+		//bridge.InitializeMaxCount (-1, 3, 3, 1);
 		trampoline.InitializeMaxCount (-1, 3, 1, 1);
 		wood_plank.InitializeMaxCount (-1, 3, 1, 1);
 		portal.InitializeMaxCount (-1, 3, 1, 1);
@@ -73,11 +73,11 @@ public class ControllerInputManager : MonoBehaviour {
 	
 	void Update () {
         device = SteamVR_Controller.Input((int)trackedObj.index);
-        
-		if (!IsHoldingBall()) 
-		{
-			Teleport ();
-		}
+
+        if (!IsHoldingBall())
+        {
+            Teleport();
+        }
         else if (IsHoldingBall() && device.GetPress(SteamVR_Controller.ButtonMask.Touchpad) && isLeftController)
         {
             ball.GetComponent<Renderer>().material = outsidePlayspaceMaterial;
@@ -92,10 +92,7 @@ public class ControllerInputManager : MonoBehaviour {
 	//- returns false if the controller is not parented to the ball
 	bool IsHoldingBall ()
 	{
-		if (ball.transform.parent == gameObject.transform || ball.transform.parent == rightController.gameObject.transform) {
-			return true;
-		} 
-		return false;
+        return (ball.transform.parent == gameObject.transform || ball.transform.parent == rightController.gameObject.transform);
 	}
 
     /* -------------------------------------------------------------------------------------------------------- //
@@ -171,8 +168,6 @@ public class ControllerInputManager : MonoBehaviour {
         rigidbody.isKinematic = false;
         rigidbody.velocity = device.velocity * throwForce;
         rigidbody.angularVelocity = device.angularVelocity;
-
-       // ballReset.AntiCheat();
     }
 
     private void OnTriggerStay(Collider other)
@@ -188,20 +183,18 @@ public class ControllerInputManager : MonoBehaviour {
                 GrabObject(other);
             }
 		}
-        
-            if (other.gameObject.CompareTag("Structure"))
+        if (other.gameObject.CompareTag("Structure"))
+        {
+            if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
             {
-                if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
-                {
-                    other.transform.SetParent(null);
-                    Rigidbody rigidbody = other.GetComponent<Rigidbody>();
-                    rigidbody.isKinematic = false;
-                }
-                else if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
-                {
-                    GrabObject(other);
-                }
+                other.transform.SetParent(null);
+                Rigidbody rigidbody = other.GetComponent<Rigidbody>();
             }
+            else if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
+            {
+                 GrabObject(other);
+            }
+        }
     }
 
     /* -------------------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -230,7 +223,6 @@ public class ControllerInputManager : MonoBehaviour {
                         swipeSum = 0;
                         SwipeRight();
                         hasSwipedRight = true;
-                        hasSwipedLeft = false;
                     }
                 }
 
@@ -241,7 +233,6 @@ public class ControllerInputManager : MonoBehaviour {
                         swipeSum = 0;
                         SwipeLeft();
                         hasSwipedLeft = true;
-                        hasSwipedRight = false;
                     }
                 }
             }
@@ -278,10 +269,10 @@ public class ControllerInputManager : MonoBehaviour {
     void SpawnObject ()
     {
 		switch (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject].name) {
-		case "Bridge":
+		/*case "Bridge":
 			bridge.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
 				objectMenuManager.objectList[objectMenuManager.currentObject].transform);
-			break;
+			break; */
 		case "Trampoline":
 			trampoline.SpawnObject (objectMenuManager.objectListPrefabs[objectMenuManager.currentObject],
 				objectMenuManager.objectList[objectMenuManager.currentObject].transform);

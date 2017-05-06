@@ -6,17 +6,22 @@ public class BallReset : MonoBehaviour {
 
     Vector3 initialPosition;
     Rigidbody rigidBody;
+    AudioSource audioSource;
     public Material outsidePlayspaceMaterial;
     [HideInInspector]
     public Material insidePlayspaceMaterial;
     int layerMask;
     Goal goal;
 
+    public AudioClip hitStar;
+    public AudioClip hitGround;
+
 	void Awake () 
 	{
         rigidBody = GetComponent<Rigidbody>();
         insidePlayspaceMaterial = GetComponent<Renderer>().material;
 		goal = GameObject.FindObjectOfType<Goal> ();
+        audioSource = GetComponent<AudioSource>();
 	}
 
 	void Start () 
@@ -28,6 +33,8 @@ public class BallReset : MonoBehaviour {
 	{
 		if (other.gameObject.CompareTag ("Ground"))
 		{
+            audioSource.PlayOneShot(hitGround, 0.55f);
+
 			transform.position = initialPosition;
 			rigidBody.velocity = Vector3.zero;
 
@@ -50,6 +57,7 @@ public class BallReset : MonoBehaviour {
         {
             if (other.gameObject.CompareTag("Collectable"))
             {
+                audioSource.PlayOneShot(hitStar, 0.8f);
                 other.gameObject.SetActive(false);
             }
         }

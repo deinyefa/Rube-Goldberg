@@ -10,10 +10,9 @@ public class Goal : MonoBehaviour {
 
 	void OnCollisionEnter (Collision other)
 	{
-		if (other.gameObject.CompareTag("Throwable")) 
+		if (other.gameObject.CompareTag("Throwable") && AreStarsAndGoalInActive()) 
 		{
-			if (AreStarsAndGoalInActive())
-			{
+            Debug.Log("Has collided with the goal");
 				switch (SceneManager.GetActiveScene().name)
 				{
 				case "Level1":
@@ -31,7 +30,6 @@ public class Goal : MonoBehaviour {
 				default: Debug.Log("StartScreen");
 					break;
 				}
-			}
 		}
 	}
 
