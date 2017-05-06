@@ -33,7 +33,7 @@ public class BallReset : MonoBehaviour {
 	{
 		if (other.gameObject.CompareTag ("Ground"))
 		{
-            audioSource.PlayOneShot(hitGround, 0.55f);
+            audioSource.PlayOneShot(hitGround, 0.75f);
 
 			transform.position = initialPosition;
 			rigidBody.velocity = Vector3.zero;
@@ -57,7 +57,7 @@ public class BallReset : MonoBehaviour {
         {
             if (other.gameObject.CompareTag("Collectable"))
             {
-                audioSource.PlayOneShot(hitStar, 0.8f);
+                audioSource.PlayOneShot(hitStar, 0.6f);
                 other.gameObject.SetActive(false);
             }
         }

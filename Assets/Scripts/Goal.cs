@@ -12,7 +12,6 @@ public class Goal : MonoBehaviour {
 	{
 		if (other.gameObject.CompareTag("Throwable") && AreStarsAndGoalInActive()) 
 		{
-            Debug.Log("Has collided with the goal");
 				switch (SceneManager.GetActiveScene().name)
 				{
 				case "Level1":
